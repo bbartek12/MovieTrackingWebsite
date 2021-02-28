@@ -29,5 +29,11 @@ namespace MovieTrackingWebsite.Models
         {
             return new ApplicationDbContext();
         }
+
+        public DbSet<Review> Reviews { get; set; }
+        public DbSet<PublicMovie> PublicMovies { get; set; }
+        public DbSet<UserMovie> UserMovies { get; set; }
+        public DbSet<UserList> UserLists { get; set; }
+
     }
 }

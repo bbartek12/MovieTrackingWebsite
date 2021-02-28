@@ -1,0 +1,56 @@
+﻿@model IEnumerable<MovieTrackingWebsite.Models.PublicMovie>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<style>
+    img:hover {
+        opacity: .7;
+    }
+
+</style>
+<h2>Movies</h2>
+
+<p>
+    <a href='@Url.Action("AddMovie", "PublicMovies")' class="btn btn-primary btn-lg">Add a Movie</a>
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Title)
+        </th>
+        <th></th>
+    </tr>
+    @{var count = 0;}
+    @for (int i = count; count < Model.ToArray().Length; i++)
+    {
+
+        <tr>
+            @for (int j = 0; j < 6; j++)
+            {
+                if (count >= Model.ToArray().Length)
+                {
+                    break;
+                }
+
+
+                try
+                {
+                    <td>
+                        <div style="text-align:center">
+                            <a href="@Url.Action("Details", "PublicMovies", new { id = Model.ToArray()[count].PublicMovieId })">
+                                <img src="@Url.Content(Model.ToArray()[count].Image)" onerror="this.src = null; this.src = '~/Uploads/default.jpg';" alt="@Model.ToArray()[count].Title" width="130" height="200" />
+                                <br />
+                                @Html.DisplayFor(modelItem => Model.ToArray()[count].Title)
+                            </a>
+                        </div>
+                    </td>
+                }
+                catch { }
+                count++;
+            }
+        </tr>
+    }
+
+</table>
