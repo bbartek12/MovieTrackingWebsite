@@ -11,5 +11,10 @@ namespace MovieTrackingWebsite.Models
         public int UserMovieId { get; set; }
         public Status Status { get; set; }
         public virtual List<Review> ReviewsList { get; set; }
+
+        public MovieDetailViewModel()
+        {
+            ReviewsList = new List<Review>();
+        }
     }
 }

@@ -78,16 +78,66 @@ namespace MovieTrackingWebsite.Controllers
             }
             return View(movie);
         }
+        
+        
+        // Create a userlist for the current logged in user
+        public void createUserList()
+        {
 
+            ApplicationUser currUser = db.Users.FirstOrDefault(user => user.UserName == User.Identity.Name);
+
+            if(!db.UserLists.Where(user => user.User.UserName == User.Identity.Name).Any())
+            {
+                db.UserLists.Add(new UserList()
+                {
+                    User = currUser
+                });
+                db.SaveChanges();
+            }
+
+        }
 
         public ActionResult MovieInfo(int ? id)
         {
-            return View();
+            if(id == null)
+            {
+                return new HttpStatusCodeResult(System.Net.HttpStatusCode.BadRequest);
+            }
+
+            createUserList(); // Create user if one does not already exist
+            
+            PublicMovie publicMovie = db.PublicMovies.Find(id); // Get selected movie
+
+            if(publicMovie == null)
+            {
+                return HttpNotFound();
+            }
+
+            // Create movie model to store current movie
+            MovieDetailViewModel movieDetailViewModel = new MovieDetailViewModel()
+            {
+                Movie = publicMovie
+            };
+            
+            // Get logged in user
+            var currUser= db.UserLists.FirstOrDefault(user => user.User.UserName == User.Identity.Name);
+           
+            // If current user is logged in and contains a movie with title of selected movie
+            if(currUser != null && currUser.WatchList.Where(movie => movie.Title == publicMovie.Title).Any())
+            {
+                movieDetailViewModel.Status = currUser.WatchList.FirstOrDefault(movie => movie.Title == publicMovie.Title).Status;
+                movieDetailViewModel.UserMovieId = currUser.UserListId;
+            }
+
+            movieDetailViewModel.ReviewsList.Where(review => review.PublicMovieId == publicMovie.PublicMovieId); // Get review for current movie
+
+            return View(movieDetailViewModel);
         }
-        
+
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult MovieInfo([Bind()] MovieDetailViewModel movieDetailViewModel)
+        public ActionResult MovieInfo([Bind(Include = "PublicMovieId, Title, Description, Image, Year")] MovieDetailViewModel movieDetailViewModel)
         {
 
             return View();

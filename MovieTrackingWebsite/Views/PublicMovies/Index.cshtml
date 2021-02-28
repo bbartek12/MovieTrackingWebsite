@@ -39,7 +39,7 @@
                 {
                     <td>
                         <div style="text-align:center">
-                            <a href="@Url.Action("Details", "PublicMovies", new { id = Model.ToArray()[count].PublicMovieId })">
+                            <a href="@Url.Action("MovieInfo", "PublicMovies", new { id = Model.ToArray()[count].PublicMovieId })">
                                 <img src="@Url.Content(Model.ToArray()[count].Image)" onerror="this.src = null; this.src = '~/Uploads/default.jpg';" alt="@Model.ToArray()[count].Title" width="130" height="200" />
                                 <br />
                                 @Html.DisplayFor(modelItem => Model.ToArray()[count].Title)
