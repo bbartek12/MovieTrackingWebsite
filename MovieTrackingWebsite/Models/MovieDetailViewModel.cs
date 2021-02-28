@@ -1,0 +1,15 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+
+namespace MovieTrackingWebsite.Models
+{
+    public class MovieDetailViewModel
+    {
+        public virtual PublicMovie Movie { get; set; }
+        public int UserMovieId { get; set; }
+        public Status Status { get; set; }
+        public virtual List<Review> Reviews { get; set; }
+    }
+}
