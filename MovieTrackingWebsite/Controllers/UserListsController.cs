@@ -20,19 +20,6 @@ namespace MovieTrackingWebsite.Controllers
             return View(db.UserLists.FirstOrDefault(user => user.User.UserName == User.Identity.Name).WatchList);
         }
 
-        public ActionResult Delete(int ? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            UserMovie userMovie = db.UserMovies.Find(id);
-            if (userMovie == null)
-            {
-                return HttpNotFound();
-            }
-
-            return View(userMovie);
-        }
+ 
     }
 }
