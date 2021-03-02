@@ -49,8 +49,6 @@ namespace MovieTrackingWebsite.Controllers
                     string relativePath = uploads + "/" + file.FileName;
                     string physicalPath = Server.MapPath(relativePath);
 
-                    Debug.WriteLine(relativePath);
-
                     // Store path in movie object
                     movie.Image = relativePath;
 
@@ -104,7 +102,7 @@ namespace MovieTrackingWebsite.Controllers
                 return new HttpStatusCodeResult(System.Net.HttpStatusCode.BadRequest);
             }
 
-            createUserList(); // Create user if one does not already exist
+        //    createUserList(); // Create user if one does not already exist
             
             PublicMovie publicMovie = db.PublicMovies.Find(id); // Get selected movie
 
@@ -137,10 +135,52 @@ namespace MovieTrackingWebsite.Controllers
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult MovieInfo([Bind(Include = "PublicMovieId, Title, Description, Image, Year")] MovieDetailViewModel movieDetailViewModel)
+        public ActionResult MovieInfo([Bind(Include = "Movie, Status")] MovieDetailViewModel movieDetailViewModel)
         {
 
-            return View();
+            if (ModelState.IsValid)
+            {
+
+                // Create User list if one does not already exist
+                createUserList();
+
+                // Get logged in user
+                var currUser = db.UserLists.FirstOrDefault(movie => movie.User.UserName == User.Identity.Name);
+
+                // If image is empty set it to default
+                if (String.IsNullOrEmpty(movieDetailViewModel.Movie.Image))
+                {
+                    movieDetailViewModel.Movie.Image = "~/Uploads/defualt.jpg";
+                }
+
+                // If logged in add current movie to watchlist
+                // Unnecessary since Authorization required
+                if (currUser != null)
+                {
+                    // If Movie is not in the list
+                    if (!currUser.WatchList.Where(movie => movie.Title == movieDetailViewModel.Movie.Title).Any())
+                    {
+                        currUser.WatchList.Add(new UserMovie()
+                        {
+                            Title = movieDetailViewModel.Movie.Title,
+                            Image = movieDetailViewModel.Movie.Image,
+                            Status = movieDetailViewModel.Status,
+                            PublicMovieId = movieDetailViewModel.Movie.PublicMovieId
+                        });
+                    }
+                    else
+                    {
+                        // Update status for current user
+                        currUser.WatchList.FirstOrDefault(movie => movie.PublicMovieId == movieDetailViewModel.Movie.PublicMovieId).Status = movieDetailViewModel.Status;
+                    }
+                }
+                
+                db.SaveChanges();
+
+                return RedirectToAction("Index");
+            }
+
+            return View(movieDetailViewModel);
         }
     }
 }

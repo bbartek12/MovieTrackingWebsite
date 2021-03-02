@@ -1,0 +1,52 @@
+﻿@model IEnumerable<MovieTrackingWebsite.Models.UserMovie>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Title)
+        </th>
+
+         <th>
+            @Html.DisplayNameFor(model => model.Status)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+
+         <td>
+             
+           @try
+           {
+            <img src="@Url.Content(item.Image)" onerror="this.src = null; this.src = '~/Upload/default.jpg';"  width="50" height="75" />
+           }
+           catch { }
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Title)
+        </td>
+
+         <td>
+            @Html.DisplayFor(modelItem => item.Status)
+        </td>
+              <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.UserMovieId }) |
+            @Html.ActionLink("Details", "Details", new { id=item.UserMovieId }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.UserMovieId })
+        </td>
+    </tr>
+}
+
+</table>

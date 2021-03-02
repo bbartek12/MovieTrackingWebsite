@@ -17,6 +17,7 @@
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
     @Html.HiddenFor(model => model.Movie.PublicMovieId)
     @Html.HiddenFor(model => model.Movie.Title)
+    @Html.HiddenFor(model => model.Movie.Image)
 
     <dd>
         <img src="@Url.Content(Model.Movie.Image)" onerror="this.src=''" alt="" width="150" height="150" />
