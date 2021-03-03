@@ -1,4 +1,4 @@
-﻿@model MovieTrackingWebsite.Models.UserList
+﻿@model IEnumerable<MovieTrackingWebsite.Models.UserMovie>
 @{
     ViewBag.Title = "Index";
 }
@@ -30,11 +30,9 @@
 
                 @try
                 {
-                    <a href='@Url.Action("Details", "PublicMovies", new { id=item.UserMovieId }, null)'>
+                    <a href='@Url.Action("MovieInfo", "PublicMovies", new { id=item.PublicMovieId }, null)'>
                         <img src="@Url.Content(item.Image)" onerror="this.src = null; this.src = '~/Upload/default.jpg';" width="50" height="75" />
-                <td>
                     @Html.DisplayFor(modelItem => item.Title)
-                </td>
                 </a>
             }
             catch { }

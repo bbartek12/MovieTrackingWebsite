@@ -1,0 +1,36 @@
+﻿@model MovieTrackingWebsite.Models.PublicMovie
+
+@{
+    ViewBag.Title = "Search";
+}
+
+<h2>Search</h2>
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <h4></h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.PublicMovieId)
+
+        <div class="form">
+            <div class="col-md-10">
+               Search: <input type="text"  name="searchQuery"/>
+                <input type="submit" value="Search" class="btn btn-primary" />
+            </div>
+        </div>
+
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

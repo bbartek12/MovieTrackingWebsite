@@ -248,8 +248,10 @@
     <Content Include="Views\PublicMovies\AddMovie.cshtml" />
     <Content Include="Views\PublicMovies\MovieInfo.cshtml" />
     <Content Include="Views\UserMovies\Delete.cshtml" />
-    <Content Include="Views\UserLists\Index.cshtml" />
     <Content Include="Views\PublicMovies\Delete.cshtml" />
+    <Content Include="Views\PublicMovies\Edit.cshtml" />
+    <Content Include="Views\UserLists\Index.cshtml" />
+    <Content Include="Views\PublicMovies\Search.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
