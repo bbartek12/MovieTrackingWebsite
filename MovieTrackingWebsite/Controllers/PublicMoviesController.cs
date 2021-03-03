@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
 
@@ -182,5 +183,52 @@ namespace MovieTrackingWebsite.Controllers
 
             return View(movieDetailViewModel);
         }
+        
+        // Get movie object to delete
+        public ActionResult Delete(int ? id)
+        {
+            if(id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest); 
+            }
+
+            PublicMovie movie = db.PublicMovies.Find(id);
+
+            if(movie == null)
+            {
+                return HttpNotFound();
+            }
+
+            return View(movie);
+        }
+        
+        // Delete movie from database after user submits form
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public ActionResult Delete(int id)
+        {
+            PublicMovie publicMovie = db.PublicMovies.Find(id);
+
+            // Remove from all user's lists
+            db.UserMovies.RemoveRange(db.UserMovies.Where(movie => movie.PublicMovieId == id));
+            
+            // Remove the public version of movie
+            db.PublicMovies.Remove(publicMovie);
+
+            db.SaveChanges();
+            return RedirectToAction("Index");
+        }
+        
+
+
+ /*       protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                db.Dispose();
+            }
+            base.Dispose();
+        }*/
+
     }
 }

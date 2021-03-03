@@ -249,6 +249,7 @@
     <Content Include="Views\PublicMovies\MovieInfo.cshtml" />
     <Content Include="Views\UserMovies\Delete.cshtml" />
     <Content Include="Views\UserLists\Index.cshtml" />
+    <Content Include="Views\PublicMovies\Delete.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
