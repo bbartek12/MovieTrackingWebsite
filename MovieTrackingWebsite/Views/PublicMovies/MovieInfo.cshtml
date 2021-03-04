@@ -44,10 +44,10 @@
         </dt>
 
         <dd>
-            <pre>
 
+            <div style="white-space: pre-line;">
             @Html.DisplayFor(model => model.Movie.Description)
-            </pre>
+                </div>
         </dd>
 
 
@@ -78,9 +78,25 @@
 </div>
 <hr />
 <h2>Reviews</h2>
+    <a href='@Url.Action("CreateReview", "Reviews", new { id = Model.Movie.PublicMovieId }, null)' class="btn btn-primary">Write a Review</a>
 <hr />
-
+<table>
 @foreach(var item in Model.ReviewsList)
 {
+    <tr>
+        <hr />
+        @Html.DisplayFor(model => item.ReviewScore)/100
+            <div style="white-space: pre-line;">
 
+                @Html.DisplayFor(model => item.Comment)
+            </div>
+        <hr />
+    </tr>
+
+}
+</table>    
+
+@if (Model.ReviewsList.Count() >= 3) // Need at least one review otherwise will cause an error (I get movie id from first movie to get back to this page)
+{
+    <a href='@Url.Action("Index", "Reviews", new { id = Model.Movie.PublicMovieId }, null)' class="btn btn-primary btn-lg">All Reviews</a>
 }

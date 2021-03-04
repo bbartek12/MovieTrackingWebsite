@@ -1,0 +1,45 @@
+﻿@model IEnumerable<MovieTrackingWebsite.Models.Review>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Back To Movie", "MovieInfo", "PublicMovies", new { id = Model.FirstOrDefault().PublicMovieId }, null)
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.PublicMovieId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ReviewScore)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Comment)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.PublicMovieId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ReviewScore)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Comment)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.ReviewId }) |
+            @Html.ActionLink("Details", "Details", new { id=item.ReviewId }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.ReviewId })
+        </td>
+    </tr>
+}
+
+</table>

@@ -10,7 +10,7 @@ namespace MovieTrackingWebsite.Controllers
 {
     public class UserListsController : Controller
     {
-        ApplicationDbContext db = new ApplicationDbContext();
+       private ApplicationDbContext db = new ApplicationDbContext();
 
         [Authorize]
         // GET: UserLists

@@ -14,17 +14,19 @@ namespace MovieTrackingWebsite.Controllers
     public class PublicMoviesController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
-        // GET: PublicMovie
+
+        // GET: all PublicMovies
         public ActionResult Index()
         {
             return View(db.PublicMovies.ToList());
         }
 
+
+        // Gets view
         public ActionResult AddMovie()
         {
             return View();
         }
-
 
         // Create the movie object
         // Also store any images selected
@@ -48,6 +50,7 @@ namespace MovieTrackingWebsite.Controllers
             return View(movie);
         }
 
+        // Helper function which stores image in movie objects and also saves the image in specified folder
         private void saveMovieImage(PublicMovie movie, HttpPostedFileBase file)
         {
             string uploads = "~/Uploads";
@@ -128,20 +131,20 @@ namespace MovieTrackingWebsite.Controllers
             // Get logged in user
             var currUser = db.UserLists.FirstOrDefault(user => user.User.UserName == User.Identity.Name);
 
-            // If current user is logged in and contains a movie with title of selected movie
+            // If current user is logged in and contains a movie with title of selected movie update the database
             if (currUser != null && currUser.WatchList.Where(movie => movie.Title == publicMovie.Title).Any())
             {
                 movieDetailViewModel.Status = currUser.WatchList.FirstOrDefault(movie => movie.Title == publicMovie.Title).Status;
                 movieDetailViewModel.UserMovieId = currUser.UserListId;
             }
 
-            movieDetailViewModel.ReviewsList.Where(review => review.PublicMovieId == publicMovie.PublicMovieId); // Get review for current movie
+            movieDetailViewModel.ReviewsList = db.Reviews.Where(review => review.PublicMovieId == publicMovie.PublicMovieId).Take(3).ToList(); // Get review for current movie
 
             return View(movieDetailViewModel);
         }
 
 
-        // When user selects 
+        // When user selects and submits the movies status for the current movie it saves this inside the user's watchlist with the status selected
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -178,6 +181,10 @@ namespace MovieTrackingWebsite.Controllers
             return View(movieDetailViewModel);
         }
 
+
+        // Helper function which checks if movies exists in a user's watchlist
+        // If it does not then it creates a new instance of it
+        // If it does then it overwrites the data inside the database
         private static void addMovieToUserList(MovieDetailViewModel movieDetailViewModel, UserList currUser)
         {
             // If Movie is not in the list
@@ -216,7 +223,8 @@ namespace MovieTrackingWebsite.Controllers
             return View(publicMovie);
         }
 
-
+        // Allow user to change everything besides the id
+        // If no image is chosen then it sets to default
         [HttpPost]
         public ActionResult Edit([Bind(Include = "PublicMovieId, Title, Description, Year")] PublicMovie publicMovie)
         {
@@ -228,11 +236,10 @@ namespace MovieTrackingWebsite.Controllers
 
                 HttpPostedFileBase file = Request.Files["Image"];
 
+                saveMovieImage(publicMovie, file);
 
-                    saveMovieImage(publicMovie, file);
-
-                    // Replace the image location for every instance of selected movie in UserMovie
-                    userMovie.ForEach(movie => movie.Image = publicMovie.Image);
+                // Replace the image location for every instance of selected movie in UserMovie
+                userMovie.ForEach(movie => movie.Image = publicMovie.Image);
 
                 // Rename title for every instance of usermovie
                 userMovie.ForEach(movie => movie.Title = publicMovie.Title);
@@ -245,13 +252,14 @@ namespace MovieTrackingWebsite.Controllers
 
             return View(publicMovie);
         }
-
+        
+        // Get view
         public ActionResult Search()
         {
             return View();
         }
 
-
+        // Search through titles and descriptions which contains the select word(s)
         [HttpPost]
         public ActionResult Search(string searchQuery)
         {
@@ -286,7 +294,7 @@ namespace MovieTrackingWebsite.Controllers
         // Delete movie from database after user submits form
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id)
+        public ActionResult DeleteConfirmed(int id)
         {
             PublicMovie publicMovie = db.PublicMovies.Find(id);
 
@@ -299,7 +307,6 @@ namespace MovieTrackingWebsite.Controllers
             db.SaveChanges();
             return RedirectToAction("Index");
         }
-
 
         // Release umanaged resources
         protected override void Dispose(bool disposing)

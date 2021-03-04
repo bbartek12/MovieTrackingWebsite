@@ -171,6 +171,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\PublicMoviesController.cs" />
+    <Compile Include="Controllers\ReviewsController.cs" />
     <Compile Include="Controllers\UserListsController.cs" />
     <Compile Include="Controllers\UserMoviesController.cs" />
     <Compile Include="Global.asax.cs">
@@ -252,9 +253,14 @@
     <Content Include="Views\PublicMovies\Edit.cshtml" />
     <Content Include="Views\UserLists\Index.cshtml" />
     <Content Include="Views\PublicMovies\Search.cshtml" />
+    <Content Include="Views\Reviews\CreateReview.cshtml" />
+    <Content Include="Views\Reviews\Index.cshtml" />
+    <Content Include="Views\Reviews\Delete.cshtml" />
+    <Content Include="Views\Reviews\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Searches\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

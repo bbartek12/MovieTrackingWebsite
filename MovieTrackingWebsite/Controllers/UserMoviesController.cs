@@ -10,7 +10,7 @@ namespace MovieTrackingWebsite.Controllers
 {
     public class UserMoviesController : Controller
     {
-        ApplicationDbContext db = new ApplicationDbContext();
+       private ApplicationDbContext db = new ApplicationDbContext();
         public ActionResult Delete(int ? id)
         {
             if (id == null)
