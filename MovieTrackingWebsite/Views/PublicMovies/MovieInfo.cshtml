@@ -20,7 +20,7 @@
         @Html.HiddenFor(model => model.Movie.Image)
 
         <dd>
-            <img src="@Url.Content(Model.Movie.Image)" onerror="this.src=''" alt="" width="150" height="150" />
+            <img src="@Url.Content(Model.Movie.Image)" onerror="this.src=''" alt="" width="180" height="250" />
         </dd>
 
         <dt>
@@ -30,13 +30,24 @@
         <dd>
             @Html.DisplayFor(model => model.Movie.Title)
         </dd>
+      
+        <dt>
+            @Html.DisplayNameFor(model => model.Movie.Year)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Movie.Year)
+        </dd>
 
         <dt>
             @Html.DisplayNameFor(model => model.Movie.Description)
         </dt>
 
         <dd>
+            <pre>
+
             @Html.DisplayFor(model => model.Movie.Description)
+            </pre>
         </dd>
 
 
@@ -65,4 +76,11 @@
     <a href='@Url.Action("Edit", "PublicMovies", new { id=Model.Movie.PublicMovieId})' class="btn btn-primary">Edit</a>
     <a href='@Url.Action("Delete", "PublicMovies", new { id=Model.Movie.PublicMovieId})' class="btn btn-danger">Delete</a>
 </div>
+<hr />
+<h2>Reviews</h2>
+<hr />
 
+@foreach(var item in Model.ReviewsList)
+{
+
+}

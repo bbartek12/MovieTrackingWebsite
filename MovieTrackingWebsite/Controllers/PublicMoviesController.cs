@@ -30,14 +30,13 @@ namespace MovieTrackingWebsite.Controllers
         // Also store any images selected
         // if none are selected the default image is chosen
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public ActionResult AddMovie([Bind(Include = "PublicMovieId, Title, Description, Image, Year")] PublicMovie movie)
         {
             if (ModelState.IsValid)
             {
                 HttpPostedFileBase file = Request.Files["Image"]; // Retrieve file
 
-                SaveMovieImage(movie, file);
+                saveMovieImage(movie, file);
 
                 // Add and save movie inside database
                 db.PublicMovies.Add(movie);
@@ -49,7 +48,7 @@ namespace MovieTrackingWebsite.Controllers
             return View(movie);
         }
 
-        private void SaveMovieImage(PublicMovie movie, HttpPostedFileBase file)
+        private void saveMovieImage(PublicMovie movie, HttpPostedFileBase file)
         {
             string uploads = "~/Uploads";
 
@@ -74,10 +73,10 @@ namespace MovieTrackingWebsite.Controllers
                     file.SaveAs(physicalPath);
                 }
             }
-            else // File was not selected
+            else // file is not selected
             {
                 // If no image is selected make the image to default
-                if (String.IsNullOrEmpty(movie.Image))
+                if (String.IsNullOrEmpty(file.FileName))
                 {
                     movie.Image = uploads + "/default.jpg";
                 }
@@ -219,7 +218,6 @@ namespace MovieTrackingWebsite.Controllers
 
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "PublicMovieId, Title, Description, Year")] PublicMovie publicMovie)
         {
             if (ModelState.IsValid)
@@ -230,14 +228,11 @@ namespace MovieTrackingWebsite.Controllers
 
                 HttpPostedFileBase file = Request.Files["Image"];
 
-                if (file != null && file.ContentLength > 0)
-                {
 
-                    SaveMovieImage(publicMovie, file);
+                    saveMovieImage(publicMovie, file);
 
                     // Replace the image location for every instance of selected movie in UserMovie
                     userMovie.ForEach(movie => movie.Image = publicMovie.Image);
-                }
 
                 // Rename title for every instance of usermovie
                 userMovie.ForEach(movie => movie.Title = publicMovie.Title);
@@ -259,7 +254,7 @@ namespace MovieTrackingWebsite.Controllers
 
         [HttpPost]
         public ActionResult Search(string searchQuery)
-        {   
+        {
             // If search is empty return all movies list
             if (String.IsNullOrEmpty(searchQuery))
             {
@@ -271,23 +266,23 @@ namespace MovieTrackingWebsite.Controllers
         }
 
         // Get movie object to delete
-        public ActionResult Delete(int ? id)
+        public ActionResult Delete(int? id)
         {
-            if(id == null)
+            if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest); 
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
             PublicMovie movie = db.PublicMovies.Find(id);
 
-            if(movie == null)
+            if (movie == null)
             {
                 return HttpNotFound();
             }
 
             return View(movie);
         }
-        
+
         // Delete movie from database after user submits form
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -297,7 +292,7 @@ namespace MovieTrackingWebsite.Controllers
 
             // Remove from all user's lists
             db.UserMovies.RemoveRange(db.UserMovies.Where(movie => movie.PublicMovieId == id));
-            
+
             // Remove the public version of movie
             db.PublicMovies.Remove(publicMovie);
 

@@ -10,6 +10,11 @@ namespace MovieTrackingWebsite.Controllers
     {
         public ActionResult Index()
         {
+            // Prevent from logged in user from seeing a page to join or login
+            if (User.Identity.IsAuthenticated)
+            {
+               return RedirectToAction("Index", "PublicMovies");
+            }
             return View();
         }
 

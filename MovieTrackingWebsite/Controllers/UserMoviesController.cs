@@ -36,7 +36,7 @@ namespace MovieTrackingWebsite.Controllers
             db.UserMovies.Remove(userMovie);
             db.SaveChanges();
 
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", "UserLists");
         }
 
 
