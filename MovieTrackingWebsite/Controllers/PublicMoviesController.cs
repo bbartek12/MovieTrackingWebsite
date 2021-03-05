@@ -92,7 +92,8 @@ namespace MovieTrackingWebsite.Controllers
         {
 
             ApplicationUser currUser = db.Users.FirstOrDefault(user => user.UserName == User.Identity.Name);
-
+            
+            // If User with the current username does not have a userlist, then create one
             if (!db.UserLists.Where(user => user.User.UserName == User.Identity.Name).Any())
             {
                 db.UserLists.Add(new UserList()
@@ -137,9 +138,11 @@ namespace MovieTrackingWebsite.Controllers
                 movieDetailViewModel.Status = currUser.WatchList.FirstOrDefault(movie => movie.Title == publicMovie.Title).Status;
                 movieDetailViewModel.UserMovieId = currUser.UserListId;
             }
+            
+            movieDetailViewModel.ReviewsList.AddRange(db.Reviews.Where(review => review.PublicMovieId == publicMovie.PublicMovieId).Take(3)); // Get review for current movie
 
-            movieDetailViewModel.ReviewsList = db.Reviews.Where(review => review.PublicMovieId == publicMovie.PublicMovieId).Take(3).ToList(); // Get review for current movie
-
+            //Debug.WriteLine(db.Reviews.Where(re => re.User.UserName == User.Identity.Name).First().User.UserName);
+       //     Debug.WriteLine(db.Reviews.Count());
             return View(movieDetailViewModel);
         }
 
@@ -150,6 +153,7 @@ namespace MovieTrackingWebsite.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult MovieInfo([Bind(Include = "Movie, Status")] MovieDetailViewModel movieDetailViewModel)
         {
+            
 
             if (ModelState.IsValid)
             {

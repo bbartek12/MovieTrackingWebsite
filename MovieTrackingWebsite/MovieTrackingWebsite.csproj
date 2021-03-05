@@ -55,6 +55,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Numerics" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -177,6 +178,15 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202102280608367_InitialCreate.cs" />
+    <Compile Include="Migrations\202102280608367_InitialCreate.Designer.cs">
+      <DependentUpon>202102280608367_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202103040738285_UpdateReview.cs" />
+    <Compile Include="Migrations\202103040738285_UpdateReview.Designer.cs">
+      <DependentUpon>202103040738285_UpdateReview.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\MovieDetailViewModel.cs" />
     <Compile Include="Models\Review.cs" />
@@ -274,6 +284,14 @@
     <None Include="packages.config" />
     <Content Include="Scripts\jquery-3.4.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.4.1.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\202102280608367_InitialCreate.resx">
+      <DependentUpon>202102280608367_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202103040738285_UpdateReview.resx">
+      <DependentUpon>202103040738285_UpdateReview.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

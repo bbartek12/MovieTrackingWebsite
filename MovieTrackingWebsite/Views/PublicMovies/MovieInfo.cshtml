@@ -18,6 +18,7 @@
         @Html.HiddenFor(model => model.Movie.PublicMovieId)
         @Html.HiddenFor(model => model.Movie.Title)
         @Html.HiddenFor(model => model.Movie.Image)
+        @Html.HiddenFor(model => model.ReviewsList)
 
         <dd>
             <img src="@Url.Content(Model.Movie.Image)" onerror="this.src=''" alt="" width="180" height="250" />
@@ -87,8 +88,13 @@
         <hr />
         @Html.DisplayFor(model => item.ReviewScore)/100
             <div style="white-space: pre-line;">
-
+                @Html.DisplayFor(model => item.User)
                 @Html.DisplayFor(model => item.Comment)
+                @if (item.User != null && item.User.UserName == User.Identity.Name)
+                {
+                <a href='@Url.Action("Edit", "Reviews", new { id = item.ReviewId }, null)' class="btn btn-primary">Edit</a>
+                <a href='@Url.Action("Delete", "Reviews", new { id = item.ReviewId }, null)' class="btn btn-danger">Delete</a>
+                }
             </div>
         <hr />
     </tr>

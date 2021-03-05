@@ -10,7 +10,7 @@ namespace MovieTrackingWebsite.Models
         public int ReviewId { get; set; }
         public int PublicMovieId { get; set; }
         public int ReviewScore { get; set; }
-        public string Comment{ get; set; }
-
+        public string Comment{ get; set; }   
+        public ApplicationUser User { get; set; }
     }
 }

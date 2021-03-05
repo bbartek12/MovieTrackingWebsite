@@ -1,4 +1,5 @@
-﻿using MovieTrackingWebsite.Models;
+﻿using Microsoft.AspNet.Identity;
+using MovieTrackingWebsite.Models;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -39,10 +40,16 @@ namespace MovieTrackingWebsite.Controllers
         // Save movie and attach it to current movie id
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult CreateReview([Bind(Include = "ReviewId, PublicMovieId, Comment, ReviewScore")] Review review)
+        public ActionResult CreateReview([Bind(Include = "ReviewId, PublicMovieId, Comment, ReviewScore, User")] Review review)
         {
             if (ModelState.IsValid)
             {
+                // Store current user
+                string userId = User.Identity.GetUserId();
+                ApplicationUser user = db.Users.FirstOrDefault(usr => usr.UserName == User.Identity.Name);
+
+                review.User = user;
+                Debug.WriteLine(review.User.UserName);
                 db.Reviews.Add(review);
                 db.SaveChanges();
                 return RedirectToAction("MovieInfo", "PublicMovies", new { id = review.PublicMovieId });
@@ -95,6 +102,7 @@ namespace MovieTrackingWebsite.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Review reviews = db.Reviews.Find(id);
+
             if (reviews == null)
             {
                 return HttpNotFound();
@@ -107,7 +115,7 @@ namespace MovieTrackingWebsite.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Comment, ReviewScore, PublicMovieId, ReviewId")] Review review)
+        public ActionResult Edit([Bind(Include = "Comment, ReviewScore, PublicMovieId, ReviewId, User")] Review review)
         {
             if (ModelState.IsValid)
             {
