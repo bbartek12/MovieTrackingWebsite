@@ -1,0 +1,42 @@
+﻿@model IEnumerable<MovieTrackingWebsite.Models.PublicMovie>
+
+@{
+    ViewBag.Title = "SearchResults";
+}
+
+<h2>Search Results</h2>
+<table class="table">
+    <tr>
+    </tr>
+    @{var count = 0;}
+    @for (int i = count; count < Model.ToArray().Length; i++)
+    {
+
+        <tr>
+            @for (int j = 0; j < 6; j++)
+            {
+                if (count >= Model.ToArray().Length)
+                {
+                    break;
+                }
+
+
+                try
+                {
+                    <td>
+                        <div style="text-align:center">
+                            <a href="@Url.Action("MovieInfo", "PublicMovies", new { id = Model.ToArray()[count].PublicMovieId })">
+                                <img src="@Url.Content(Model.ToArray()[count].Image)" onerror="this.src = null; this.src = '~/Uploads/default.jpg';" alt="@Model.ToArray()[count].Title" width="130" height="200" />
+                                <br />
+                                @Html.DisplayFor(modelItem => Model.ToArray()[count].Title)
+                            </a>
+                        </div>
+                    </td>
+                }
+                catch { }
+                count++;
+            }
+        </tr>
+    }
+
+</table>

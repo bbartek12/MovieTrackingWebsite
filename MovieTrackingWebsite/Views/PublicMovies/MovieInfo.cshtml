@@ -88,16 +88,21 @@
     {
         <tr>
             <hr />
+          <h4>
             @Html.DisplayFor(model => item.ReviewScore)/100
+              </h4>
             <div style="white-space: pre-line;">
-                @Html.DisplayFor(model => item.UserId)
                 @Html.DisplayFor(model => item.Comment)
-                @if (item.UserId == User.Identity.GetUserId())
+
+                           </div>
+                 @if (item.UserId == User.Identity.GetUserId())
                 {
-                    <a href='@Url.Action("Edit", "Reviews", new { id = item.ReviewId }, null)' class="btn btn-primary">Edit</a>
-                    <a href='@Url.Action("Delete", "Reviews", new { id = item.ReviewId }, null)' class="btn btn-danger">Delete</a>
+                    <div>
+                        <a href='@Url.Action("Edit", "Reviews", new { id = item.ReviewId }, null)' class="btn btn-primary">Edit</a>
+                        <a href='@Url.Action("Delete", "Reviews", new { id = item.ReviewId }, null)' class="btn btn-danger">Delete</a>
+                    </div>
                 }
-            </div>
+
             <hr />
         </tr>
 

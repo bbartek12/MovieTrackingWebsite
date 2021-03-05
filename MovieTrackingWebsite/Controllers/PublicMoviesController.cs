@@ -38,7 +38,7 @@ namespace MovieTrackingWebsite.Controllers
             {
                 HttpPostedFileBase file = Request.Files["Image"]; // Retrieve file
 
-                saveMovieImage(movie, file);
+                SaveMovieImage(movie, file);
 
                 // Add and save movie inside database
                 db.PublicMovies.Add(movie);
@@ -51,7 +51,7 @@ namespace MovieTrackingWebsite.Controllers
         }
 
         // Helper function which stores image in movie objects and also saves the image in specified folder
-        private void saveMovieImage(PublicMovie movie, HttpPostedFileBase file)
+        private void SaveMovieImage(PublicMovie movie, HttpPostedFileBase file)
         {
             string uploads = "~/Uploads";
 
@@ -84,25 +84,6 @@ namespace MovieTrackingWebsite.Controllers
                     movie.Image = uploads + "/default.jpg";
                 }
             }
-        }
-
-
-        // Create a userlist for the current logged in user
-        public void createUserList()
-        {
-
-            ApplicationUser currUser = db.Users.FirstOrDefault(user => user.UserName == User.Identity.Name);
-            
-            // If User with the current username does not have a userlist, then create one
-            if (!db.UserLists.Where(user => user.User.UserName == User.Identity.Name).Any())
-            {
-                db.UserLists.Add(new UserList()
-                {
-                    User = currUser
-                });
-                db.SaveChanges();
-            }
-
         }
 
 
@@ -141,8 +122,6 @@ namespace MovieTrackingWebsite.Controllers
             
             movieDetailViewModel.ReviewsList.AddRange(db.Reviews.Where(review => review.PublicMovieId == publicMovie.PublicMovieId).Take(3)); // Get review for current movie
 
-            //Debug.WriteLine(db.Reviews.Where(re => re.User.UserName == User.Identity.Name).First().User.UserName);
-       //     Debug.WriteLine(db.Reviews.Count());
             return View(movieDetailViewModel);
         }
 
@@ -153,14 +132,9 @@ namespace MovieTrackingWebsite.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult MovieInfo([Bind(Include = "Movie, Status")] MovieDetailViewModel movieDetailViewModel)
         {
-            
 
             if (ModelState.IsValid)
             {
-
-                // Create User list if one does not already exist
-                createUserList();
-
                 // Get logged in user
                 var currUser = db.UserLists.FirstOrDefault(movie => movie.User.UserName == User.Identity.Name);
 
@@ -174,7 +148,7 @@ namespace MovieTrackingWebsite.Controllers
                 // Unnecessary since Authorization required
                 if (currUser != null)
                 {
-                    addMovieToUserList(movieDetailViewModel, currUser);
+                    AddMovieToUserList(movieDetailViewModel, currUser);
                 }
 
                 db.SaveChanges();
@@ -189,7 +163,7 @@ namespace MovieTrackingWebsite.Controllers
         // Helper function which checks if movies exists in a user's watchlist
         // If it does not then it creates a new instance of it
         // If it does then it overwrites the data inside the database
-        private static void addMovieToUserList(MovieDetailViewModel movieDetailViewModel, UserList currUser)
+        private static void AddMovieToUserList(MovieDetailViewModel movieDetailViewModel, UserList currUser)
         {
             // If Movie is not in the list
             if (!currUser.WatchList.Where(movie => movie.Title == movieDetailViewModel.Movie.Title).Any())
@@ -240,7 +214,7 @@ namespace MovieTrackingWebsite.Controllers
 
                 HttpPostedFileBase file = Request.Files["Image"];
 
-                saveMovieImage(publicMovie, file);
+                SaveMovieImage(publicMovie, file);
 
                 // Replace the image location for every instance of selected movie in UserMovie
                 userMovie.ForEach(movie => movie.Image = publicMovie.Image);
@@ -274,8 +248,14 @@ namespace MovieTrackingWebsite.Controllers
             }
 
             // Otherwise apply the search string
-            return View("Index", db.PublicMovies.Where(movie => movie.Title.Contains(searchQuery) || movie.Description.Contains(searchQuery)).ToList());
+            return View("SearchResults", db.PublicMovies.Where(movie => movie.Title.Contains(searchQuery) || movie.Description.Contains(searchQuery)).ToList());
         }
+        // GET: all PublicMovies
+        public ActionResult SearchResults()
+        {
+            return View(db.PublicMovies.ToList());
+        }
+
 
         // Get movie object to delete
         public ActionResult Delete(int? id)
@@ -307,6 +287,9 @@ namespace MovieTrackingWebsite.Controllers
 
             // Remove the public version of movie
             db.PublicMovies.Remove(publicMovie);
+
+            // Remove every review made for this movie
+            db.Reviews.RemoveRange(db.Reviews.Where(review => review.PublicMovieId == id));
 
             db.SaveChanges();
             return RedirectToAction("Index");
