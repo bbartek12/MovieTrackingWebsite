@@ -11,6 +11,6 @@ namespace MovieTrackingWebsite.Models
         public int PublicMovieId { get; set; }
         public int ReviewScore { get; set; }
         public string Comment{ get; set; }   
-        public ApplicationUser User { get; set; }
+        public string UserId { get; set; }
     }
 }

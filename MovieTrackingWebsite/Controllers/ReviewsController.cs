@@ -48,8 +48,8 @@ namespace MovieTrackingWebsite.Controllers
                 string userId = User.Identity.GetUserId();
                 ApplicationUser user = db.Users.FirstOrDefault(usr => usr.UserName == User.Identity.Name);
 
-                review.User = user;
-                Debug.WriteLine(review.User.UserName);
+                review.UserId = userId;
+                Debug.WriteLine(review.UserId );
                 db.Reviews.Add(review);
                 db.SaveChanges();
                 return RedirectToAction("MovieInfo", "PublicMovies", new { id = review.PublicMovieId });

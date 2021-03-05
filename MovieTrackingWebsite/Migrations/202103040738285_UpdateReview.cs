@@ -7,9 +7,9 @@ namespace MovieTrackingWebsite.Migrations
     {
         public override void Up()
         {
-            AddColumn("dbo.Reviews", "User_Id", c => c.String(maxLength: 128));
+        /*    AddColumn("dbo.Reviews", "User_Id", c => c.String(maxLength: 128));
             CreateIndex("dbo.Reviews", "User_Id");
-            AddForeignKey("dbo.Reviews", "User_Id", "dbo.AspNetUsers", "Id");
+            AddForeignKey("dbo.Reviews", "User_Id", "dbo.AspNetUsers", "Id");*/
         }
         
         public override void Down()

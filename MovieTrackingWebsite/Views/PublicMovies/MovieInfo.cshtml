@@ -1,4 +1,6 @@
 ﻿@model MovieTrackingWebsite.Models.MovieDetailViewModel
+@using Microsoft.AspNet.Identity;
+
 
 @{
     ViewBag.Title = "MovieInfo";
@@ -31,7 +33,7 @@
         <dd>
             @Html.DisplayFor(model => model.Movie.Title)
         </dd>
-      
+
         <dt>
             @Html.DisplayNameFor(model => model.Movie.Year)
         </dt>
@@ -47,8 +49,8 @@
         <dd>
 
             <div style="white-space: pre-line;">
-            @Html.DisplayFor(model => model.Movie.Description)
-                </div>
+                @Html.DisplayFor(model => model.Movie.Description)
+            </div>
         </dd>
 
 
@@ -79,28 +81,28 @@
 </div>
 <hr />
 <h2>Reviews</h2>
-    <a href='@Url.Action("CreateReview", "Reviews", new { id = Model.Movie.PublicMovieId }, null)' class="btn btn-primary">Write a Review</a>
+<a href='@Url.Action("CreateReview", "Reviews", new { id = Model.Movie.PublicMovieId }, null)' class="btn btn-primary">Write a Review</a>
 <hr />
 <table>
-@foreach(var item in Model.ReviewsList)
-{
-    <tr>
-        <hr />
-        @Html.DisplayFor(model => item.ReviewScore)/100
+    @foreach (var item in Model.ReviewsList)
+    {
+        <tr>
+            <hr />
+            @Html.DisplayFor(model => item.ReviewScore)/100
             <div style="white-space: pre-line;">
-                @Html.DisplayFor(model => item.User)
+                @Html.DisplayFor(model => item.UserId)
                 @Html.DisplayFor(model => item.Comment)
-                @if (item.User != null && item.User.UserName == User.Identity.Name)
+                @if (item.UserId == User.Identity.GetUserId())
                 {
-                <a href='@Url.Action("Edit", "Reviews", new { id = item.ReviewId }, null)' class="btn btn-primary">Edit</a>
-                <a href='@Url.Action("Delete", "Reviews", new { id = item.ReviewId }, null)' class="btn btn-danger">Delete</a>
+                    <a href='@Url.Action("Edit", "Reviews", new { id = item.ReviewId }, null)' class="btn btn-primary">Edit</a>
+                    <a href='@Url.Action("Delete", "Reviews", new { id = item.ReviewId }, null)' class="btn btn-danger">Delete</a>
                 }
             </div>
-        <hr />
-    </tr>
+            <hr />
+        </tr>
 
-}
-</table>    
+    }
+</table>
 
 @if (Model.ReviewsList.Count() >= 3) // Need at least one review otherwise will cause an error (I get movie id from first movie to get back to this page)
 {

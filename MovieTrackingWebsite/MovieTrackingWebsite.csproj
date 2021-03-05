@@ -186,6 +186,10 @@
     <Compile Include="Migrations\202103040738285_UpdateReview.Designer.cs">
       <DependentUpon>202103040738285_UpdateReview.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202103050407252_ReviewChange.cs" />
+    <Compile Include="Migrations\202103050407252_ReviewChange.Designer.cs">
+      <DependentUpon>202103050407252_ReviewChange.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\MovieDetailViewModel.cs" />
@@ -291,6 +295,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202103040738285_UpdateReview.resx">
       <DependentUpon>202103040738285_UpdateReview.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202103050407252_ReviewChange.resx">
+      <DependentUpon>202103050407252_ReviewChange.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
